@@ -8,8 +8,17 @@
 // -----------------------------------------------------------------------
 
 #import "AppDelegate.h"
+//#import "IntroScene.h"
+//#import "HelloWorldScene.h"
+
+#import "cocos2d.h"
+//#import "GameConfig.h"
+//#import "RootViewController.h"
+#import "GameMainMenuScene.h"
+#import "GamePlayScene.h"
+#import "GameOverScene.h"
 #import "IntroScene.h"
-#import "HelloWorldScene.h"
+#import "GamePlayLayer.h"
 
 @implementation AppDelegate
 
@@ -49,7 +58,7 @@
 -(CCScene *)startScene
 {
 	// This method should return the very first scene to be run when your app starts.
-	return [IntroScene scene];
+	return [IntroScene node];
 }
 
 @end
