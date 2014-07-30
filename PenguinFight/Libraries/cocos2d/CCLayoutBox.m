@@ -72,7 +72,7 @@ static float roundUpToEven(float f)
         self.contentSizeType = CCSizeTypePoints;
         self.contentSize = CGSizeMake(roundUpToEven(width), roundUpToEven(maxHeight));
     }
-    else
+    else if(_direction == CCLayoutBoxDirectionVertical)
     {
         // Get the maximum width
         float maxWidth = 0;
@@ -106,6 +106,50 @@ static float roundUpToEven(float f)
         self.contentSizeType = CCSizeTypePoints;
         self.contentSize = CGSizeMake(roundUpToEven(maxWidth), roundUpToEven(height));
     }
+    else if(_direction == CCLayoutBoxDirectionGrid) // We need a Grid Like Structure
+    {
+        if (self.children.count != _rowsInGrid * _columnsInGrid) {
+            CCLOG(@"CCLayoutBox ERROR: Total No. of children is not equal to grid size");
+        }
+        else   // Positioning the nodes
+        {
+            // Get the maximum width and height
+            float maxWidth = 0;
+            float maxHeight = 0;
+            for (CCNode* child in self.children)
+            {
+                float width = child.contentSizeInPoints.width;
+                float height = child.contentSizeInPoints.height;
+                if (width > maxWidth) maxWidth = width;
+                if (height > maxHeight) maxHeight = height;
+            }
+            float height = 0;
+            for (NSInteger rowCount = 0; rowCount < _rowsInGrid; rowCount++) {
+                float width = 0;
+                // Rowwise distribution
+                for (NSInteger columnCount = 0; columnCount < _columnsInGrid; columnCount++) {
+                    
+                    CCNode *child = [self.children objectAtIndex:(rowCount * _columnsInGrid + columnCount)];
+                    CGSize childSize = child.contentSizeInPoints;
+                    CGPoint offset = child.anchorPointInPoints;
+                    CGPoint localPos = ccp(roundf(width), roundf(((maxHeight-childSize.height)/2.0f)-height) );
+                    CGPoint position = ccpAdd(localPos, offset);
+                    
+                    child.position = position;
+                    child.positionType = CCPositionTypePoints;
+                    
+                    // Increasing the width after traversing each child
+                    width += childSize.width;
+                    width += _spacing;
+                }
+                
+                height += maxHeight/2;
+                height += _spacing*2;
+            }
+        }
+        
+    }
+    
 }
 
 - (void) setSpacing:(float)spacing

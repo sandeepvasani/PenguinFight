@@ -44,6 +44,7 @@
 //		CCSetupScreenMode: CCScreenModeFixed,
 		// Run in portrait mode.
 //		CCSetupScreenOrientation: CCScreenOrientationPortrait,
+       CCSetupScreenOrientation:CCScreenOrientationLandscape,
 		// Run at a reduced framerate.
 //		CCSetupAnimationInterval: @(1.0/30.0),
 		// Run the fixed timestep extra fast.
@@ -58,7 +59,7 @@
 -(CCScene *)startScene
 {
 	// This method should return the very first scene to be run when your app starts.
-	return [IntroScene node];
+	return [GameMainMenuScene node];
 }
 
 @end

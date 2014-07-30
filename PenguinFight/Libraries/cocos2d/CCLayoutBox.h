@@ -35,6 +35,8 @@ typedef NS_ENUM(NSUInteger, CCLayoutBoxDirection)
     
     /// The children will be layout out in a vertical line.
     CCLayoutBoxDirectionVertical,
+    
+    CCLayoutBoxDirectionGrid,
 };
 
 /**
@@ -51,5 +53,8 @@ typedef NS_ENUM(NSUInteger, CCLayoutBoxDirection)
  *  The spacing in points between the child nodes.
  */
 @property (nonatomic,assign) float spacing;
+
+@property (assign) NSInteger rowsInGrid;
+@property (assign) NSInteger columnsInGrid;
 
 @end

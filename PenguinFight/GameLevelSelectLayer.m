@@ -103,7 +103,8 @@
      // Read in selected chapter levels
        // CCMenu *levelMenu = [CCMenu menuWithItems: nil];
         CCLayoutBox *levelMenu = [[CCLayoutBox alloc] init];
-        levelMenu.position=ccp(screenSize.width/2,screenSize.height/2);
+        levelMenu.anchorPoint=ccp(0, 0);
+       
         NSMutableArray *overlay = [NSMutableArray new];
         
         NSMutableArray *selectedLevels = [LevelParser loadLevelsForChapter:1];
@@ -127,7 +128,7 @@
             [item setTarget:self selector:@selector(onPlay:)];
 
             
-            
+                                 
            // [item setTag:level.number]; // note the number in a tag for later usage
             item.name=[NSString stringWithFormat:@"%d",level.number];
         //    [item setIsEnabled:level.unlocked];  // ensure locked levels are inaccessible
@@ -162,8 +163,35 @@
       //    [NSNumber numberWithInt:6],
       //    nil];
         
-        levelMenu.direction=CCLayoutBoxDirectionHorizontal;
+       //
+       
+        levelMenu.direction=CCLayoutBoxDirectionGrid;
+        //levelMenu.positionType=CCPositionUnitNormalized;
         
+        levelMenu.rowsInGrid = 3;
+        levelMenu.columnsInGrid = 6;
+        
+        if(UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
+        {
+            levelMenu.spacing = 15;
+            if([[UIScreen mainScreen] bounds].size.height == 568)
+            {
+                 levelMenu.position=ccp(levelMenu.position.x+50, screenSize.height*0.6);
+            }
+            else
+            {
+                 levelMenu.position=ccp(levelMenu.position.x+10, screenSize.height*0.6);
+            }
+        }
+        else{
+         levelMenu.spacing = 30;
+        levelMenu.position=ccp(screenSize.width*0.05,screenSize.height*0.6);
+        }
+        
+      
+           
+        
+        [levelMenu layout];
         
      // Move the whole menu up by a small percentage so it doesn't overlap the back button
         CGPoint newPosition = levelMenu.position;

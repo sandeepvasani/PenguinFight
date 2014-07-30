@@ -116,14 +116,16 @@
         
         CCLayoutBox *menu = [[CCLayoutBox alloc] init];
         
-        [menu addChild:item1];
+       
         [menu addChild:item2];
+         [menu addChild:item1];
        
      //   NSLog(@"%f",item1.position);
         // Align the menu
         menu.direction=CCLayoutBoxDirectionVertical;
         menu.anchorPoint=ccp(0.5f,0.5f);
         menu.position = ccp(screenSize.width/2,screenSize.height/2);
+        menu.spacing=10.0;
         //play.position = item1.position;
         // Add the menu to the scene
         
