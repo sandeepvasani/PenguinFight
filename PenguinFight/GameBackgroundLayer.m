@@ -40,8 +40,8 @@
 {
     
     
-    float myVelocity = -1;
-    [parallax updateWithVelocity:ccp(myVelocity, 0) AndDelta:delta];
+    //float myVelocity = -1;
+   // [parallax updateWithVelocity:ccp(myVelocity, 0) AndDelta:delta];
 }
 @end
 

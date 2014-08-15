@@ -5,6 +5,7 @@
 //  Created by macuser2 on 2/10/14.
 //  Copyright Sandeep 2014. All rights reserved.
 
+#import "CCAnimation.h"
 #import "GamePlayLayer.h"
 #import "GamePlayScene.h"
 #import "GameLevelSelectScene.h"
@@ -206,7 +207,7 @@
         [self addChild:mTimeLbl z:0]; 
 		
 		mTimeInSec = 0.0f;
-		[self schedule:@selector(tick:)];
+		[self schedule:@selector(tick:) interval:0.017];
         
         penguinlivesLbl = [CCLabelTTF labelWithString:[NSString stringWithFormat:@"Lives X  3"]
                                       fontName:@"Marker Felt"
@@ -214,7 +215,7 @@
          penguinlivesLbl.position = ccp( screenSize.width*0.10,screenSize.height*0.95);
          [self addChild:penguinlivesLbl z:0];
         
-        CCSpriteBatchNode *penguinSpriteBatchNode;
+      /*  CCSpriteBatchNode *penguinSpriteBatchNode;
         [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFramesWithFile:@"penguinatlas.plist"];
         penguinSpriteBatchNode = [CCSpriteBatchNode batchNodeWithFile:@"penguinatlas.png"];
         penguinSprite = [CCSprite spriteWithSpriteFrameName:@"penguin.png"];
@@ -229,71 +230,55 @@
         [penguinAnim addFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"penguin6.png"]];
         id animateAction = [CCActionAnimate actionWithDuration:0.5f animation:penguinAnim restoreOriginalFrame:NO];
         id repeatAction = [CCActionRepeatForever actionWithAction:animateAction];
-        [penguinSprite runAction:repeatAction];
+        [penguinSprite runAction:repeatAction];*/
+        
+        [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFramesWithFile:@"penguinatlas.plist"];
+        
+        NSMutableArray *flyAnimFrames = [NSMutableArray array];
+        for(int i = 2; i <= 6; ++i)
+        {
+            [flyAnimFrames addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName: [NSString stringWithFormat:@"penguin%d-hd.png", i]]];
+        }
+        CCAnimation *flyAnim = [CCAnimation animationWithSpriteFrames:flyAnimFrames delay:0.1f]; //Speed in which the frames will go at
+        
+        //Adding png to sprite
+        penguinSprite = [CCSprite spriteWithImageNamed:@"penguin.png"];
+       [penguinSprite setPosition:CGPointMake(screenSize.width/2, screenSize.height*0.5f)];
+        
+        
+        //Repeating the sprite animation
+        CCActionAnimate *animationAction = [CCActionAnimate actionWithAnimation:flyAnim];
+        CCActionRepeatForever *repeatingAnimation = [CCActionRepeatForever actionWithAction:animationAction];
+        
+        //Animation continuously repeating
+        [penguinSprite runAction:repeatingAnimation];
+         [self addChild:penguinSprite];
+        
         
         //Creates Player Ballon Sprites
-        balloonBlueSprite = [CCSprite spriteWithFile:@"ballonBlue.png"];
+        balloonBlueSprite = [CCSprite spriteWithImageNamed:@"ballonBlue.png"];
         [balloonBlueSprite setPosition:ccp(penguinSprite.position.x-10,penguinSprite.position.y+20)];
         [self addChild:balloonBlueSprite];
-        balloonGreenSprite = [CCSprite spriteWithFile:@"ballonGreen.png"];
+        balloonGreenSprite = [CCSprite spriteWithImageNamed:@"ballonGreen.png"];
         [balloonGreenSprite setPosition:ccp(penguinSprite.position.x+15,penguinSprite.position.y+20)];
         [self addChild:balloonGreenSprite];
         
         //Creates Enemy Penguin Sprite
-        CCSpriteBatchNode *enemySpriteBatchNode1;
-        [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFramesWithFile:@"penguinatlas.plist"];
-        enemySpriteBatchNode1 = [CCSpriteBatchNode batchNodeWithFile:@"penguinatlas.png"];
-        enemySprite1 = [CCSprite spriteWithSpriteFrameName:@"penguin.png"];
-        [enemySpriteBatchNode1 addChild:enemySprite1];
-        [self addChild:enemySpriteBatchNode1];
-       // [enemySprite1 setPosition:CGPointMake(screenSize.width/2, screenSize.height*0.17f)];
-        CCAnimation *enemyAnim1 = [CCAnimation animation];
-        [enemyAnim1 addFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"penguin2.png"]];
-        [enemyAnim1 addFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"penguin3.png"]];
-        [enemyAnim1 addFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"penguin4.png"]];
-        [enemyAnim1 addFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"penguin5.png"]];
-        [enemyAnim1 addFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"penguin6.png"]];
-        id animateEnemyAction1 = [CCActionAnimate actionWithDuration:0.5f animation:enemyAnim1 restoreOriginalFrame:NO];
-        id repeatEnemyAction1 = [CCActionRepeatForever actionWithAction:animateEnemyAction1];
-        [enemySprite1 runAction:repeatEnemyAction1];
+       
+        enemySprite1 = [CCSprite spriteWithImageNamed:@"penguin.png"];
+        [enemySprite1 runAction:repeatingAnimation];
+        [self addChild:enemySprite1];
+       
         
 
-        CCSpriteBatchNode *enemySpriteBatchNode2;
-        [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFramesWithFile:@"penguinatlas.plist"];
-        enemySpriteBatchNode2 = [CCSpriteBatchNode batchNodeWithFile:@"penguinatlas.png"];
-        enemySprite2 = [CCSprite spriteWithSpriteFrameName:@"penguin.png"];
-        [enemySpriteBatchNode2 addChild:enemySprite2];
-        [self addChild:enemySpriteBatchNode2];
-         //[enemySprite2 setPosition:CGPointMake(screenSize.width/2, screenSize.height*0.17f)];
-        CCAnimation *enemyAnim2 = [CCAnimation animation];
-        [enemyAnim2 addFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"penguin2.png"]];
-        [enemyAnim2 addFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"penguin3.png"]];
-        [enemyAnim2 addFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"penguin4.png"]];
-        [enemyAnim2 addFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"penguin5.png"]];
-        [enemyAnim2 addFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"penguin6.png"]];
-        id animateEnemyAction2 = [CCActionAnimate actionWithDuration:0.5f animation:enemyAnim2 restoreOriginalFrame:NO];
-        id repeatEnemyAction2 = [CCActionRepeatForever actionWithAction:animateEnemyAction2];
-
-        [enemySprite2 runAction:repeatEnemyAction2];
+        enemySprite2 = [CCSprite spriteWithImageNamed:@"penguin.png"];
+        [enemySprite2 runAction:repeatingAnimation];
+        [self addChild:enemySprite2];
         
         
-        CCSpriteBatchNode *enemySpriteBatchNode3;
-        [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFramesWithFile:@"penguinatlas.plist"];
-        enemySpriteBatchNode3 = [CCSpriteBatchNode batchNodeWithFile:@"penguinatlas.png"];
-        enemySprite3 = [CCSprite spriteWithSpriteFrameName:@"penguin.png"];
-        [enemySpriteBatchNode3 addChild:enemySprite3];
-        [self addChild:enemySpriteBatchNode3];
-        //[enemySprite2 setPosition:CGPointMake(screenSize.width/2, screenSize.height*0.17f)];
-        CCAnimation *enemyAnim3 = [CCAnimation animation];
-        [enemyAnim3 addFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"penguin2.png"]];
-        [enemyAnim3 addFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"penguin3.png"]];
-        [enemyAnim3 addFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"penguin4.png"]];
-        [enemyAnim3 addFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"penguin5.png"]];
-        [enemyAnim3 addFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"penguin6.png"]];
-        id animateEnemyAction3 = [CCActionAnimate actionWithDuration:0.5f animation:enemyAnim3 restoreOriginalFrame:NO];
-        id repeatEnemyAction3 = [CCActionRepeatForever actionWithAction:animateEnemyAction3];
-        
-        [enemySprite3 runAction:repeatEnemyAction3];
+        enemySprite3 = [CCSprite spriteWithImageNamed:@"penguin.png"];
+        [enemySprite3 runAction:repeatingAnimation];
+        [self addChild:enemySprite3];
     
         
         
@@ -314,16 +299,16 @@
             [enemySprite3 setScaleY:screenSize.height/768.0f];
             
             
-            waterSprite = [CCSprite spriteWithFile:@"water-hd.png"];
+            waterSprite = [CCSprite spriteWithImageNamed:@"water-hd.png"];
             [waterSprite setPosition:ccp(screenSize.width/2,waterSprite.contentSize.height/2)];
             [self addChild:waterSprite z:5];
             
-            platformSprite1 = [CCSprite spriteWithFile:@"platform_1-hd.png"];
+            platformSprite1 = [CCSprite spriteWithImageNamed:@"platform_1-hd.png"];
             [platformSprite1 setPosition:ccp(screenSize.width*0.8,screenSize.height*0.7)];
             [self addChild:platformSprite1];
             
             
-            platformSprite2 = [CCSprite spriteWithFile:@"platform_2-hd.png"];
+            platformSprite2 = [CCSprite spriteWithImageNamed:@"platform_2-hd.png"];
             [platformSprite2 setPosition:ccp(screenSize.width*0.3,screenSize.height*0.4)];
             [self addChild:platformSprite2];
         }
@@ -339,46 +324,37 @@
         
         [enemySprite3 setPosition:ccp((arc4random() % rangeX), platformSprite1.position.y+platformSprite1.contentSize.height)];
         
-                // enable touches
-      //  self.touchEnabled = YES;
-        self.userInteractionEnabled=YES;
-        
-        
-        
-      
-       // int actualX = ();
-        
-
+     
         
         
         
 
         
-        balloonRedSprite1 = [CCSprite spriteWithFile:@"ballonRed.png"];
+        balloonRedSprite1 = [CCSprite spriteWithImageNamed:@"ballonRed.png"];
         [balloonRedSprite1 setPosition:ccp(enemySprite1.position.x-10,enemySprite1.position.y+20)];
         [self addChild:balloonRedSprite1];
         
-        balloonYellowSprite1 = [CCSprite spriteWithFile:@"ballonYellow.png"];
+        balloonYellowSprite1 = [CCSprite spriteWithImageNamed:@"ballonYellow.png"];
         [balloonYellowSprite1 setPosition:ccp(enemySprite1.position.x+15,enemySprite1.position.y+20)];
         [self addChild:balloonYellowSprite1];
         
         
         
-        balloonRedSprite2 = [CCSprite spriteWithFile:@"ballonRed.png"];
+        balloonRedSprite2 = [CCSprite spriteWithImageNamed:@"ballonRed.png"];
         [balloonRedSprite2 setPosition:ccp(enemySprite2.position.x-10,enemySprite2.position.y+20)];
         [self addChild:balloonRedSprite2];
         
-        balloonYellowSprite2 = [CCSprite spriteWithFile:@"ballonYellow.png"];
+        balloonYellowSprite2 = [CCSprite spriteWithImageNamed:@"ballonYellow.png"];
         [balloonYellowSprite2 setPosition:ccp(enemySprite2.position.x+15,enemySprite2.position.y+20)];
         [self addChild:balloonYellowSprite2];
         
         
-        balloonRedSprite3 = [CCSprite spriteWithFile:@"ballonRed.png"];
+        balloonRedSprite3 = [CCSprite spriteWithImageNamed:@"ballonRed.png"];
         [balloonRedSprite3 setPosition:ccp(enemySprite3.position.x-10,enemySprite3.position.y+20)];
         
         [self addChild:balloonRedSprite3];
         
-        balloonYellowSprite3 = [CCSprite spriteWithFile:@"ballonYellow.png"];
+        balloonYellowSprite3 = [CCSprite spriteWithImageNamed:@"ballonYellow.png"];
         [balloonYellowSprite3 setPosition:ccp(enemySprite3.position.x+15,enemySprite3.position.y+20)];
         [self addChild:balloonYellowSprite3];
         
@@ -386,14 +362,10 @@
         
         
         [self initJoystickAndButtons];
-        [self scheduleUpdate];
-        [self setIsTouchEnabled:YES];
-		[self schedule:@selector(fall:)];
+        [self schedule:@selector(updates:) interval:0.017];
+        self.userInteractionEnabled=TRUE;
+		[self schedule:@selector(fall:) interval:0.017];
         
-              
-       
-      //  [self createPauseButton];
-	//	[self createPausedMenu];
         
         [self makeRandomMovement:enemySprite1];
         [self makeRandomMovement:enemySprite2];
@@ -402,33 +374,6 @@
     return self;
 }
 
-/*- (void) addenemyPenguin{
-    
-    // Determine where to spawn the monster along the platform
-    CGSize winSize = [CCDirector sharedDirector].winSize;
-    int minX = platformSprite1.position.x-platformSprite1.contentSize.width / 2;
-    int maxX = platformSprite1.position.x+platformSprite1.contentSize.width / 2;
-    int rangeX = maxX - minX;
-    int actualX = (arc4random() % rangeX);
-    
-    //Creates Enemy Penguin Sprite
-   CCSprite * penguinSprite = [CCSprite spriteWithFile:@"penguin.png"];
-    [self addChild:penguinSprite];
-    [penguinSprite setPosition:ccp(actualX, platformSprite1.position.y+platformSprite1.contentSize.height)];
-    
-  
-    
-    //Creates Enemy Ballon Sprites
-   CCSprite * balloonRedSprite = [CCSprite spriteWithFile:@"ballonYellow.png"];
-    [balloonRedSprite setPosition:ccp(penguinSprite.position.x-10,penguinSprite.position.y+20)];
- //   [self addChild:balloonRedSprite];
- CCSprite *  balloonYellowSprite = [CCSprite spriteWithFile:@"ballonRed.png"];
-    [balloonYellowSprite setPosition:ccp(penguinSprite.position.x+15,penguinSprite.position.y+20)];
-//    [self addChild:balloonYellowSprite];
-    [self makeRandomMovement:penguinSprite];
-    //[balloonRedSprite setPosition:ccp(penguinSprite.position.x-10,penguinSprite.position.y+20)];
-    //[balloonYellowSprite setPosition:ccp(penguinSprite.position.x+15,penguinSprite.position.y+20)];
-}*/
 
 - (void) makeRandomMovement: (CCSprite *)sprite {
 	//movementsnot resrt ricted
@@ -453,19 +398,23 @@
 }
 
 
-- (void)ccTouchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
+- (void)touchEnded:(NSSet *)touch withEvent:(UIEvent *)event {
+    
     if(penguindied!=1)
     {
         [self unschedule:@selector(fly:)];
-        [self schedule:@selector(fall:)];
+        [self schedule:@selector(fall:) interval:0.017];
     }
 }
 
-- (void) ccTouchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+- (void)touchBegan:(NSSet *)touch withEvent:(UIEvent *)event {
+     NSLog(@"touchedd");
+    
     if(penguindied!=1)
     {
         [self unschedule:@selector(fall:)];
-        [self schedule:@selector(fly:)];
+        [self schedule:@selector(fly:) interval:0.017];
+        
     }
 }
 
@@ -541,7 +490,8 @@ enemyPenguinCount--;
 
 
 -(void) saveandmovetoNextlevel{
-    [self unscheduleUpdate];
+    [self unschedule:@selector(updates:)];
+    
     GameData *gameData = [GameDataParser loadData];
     int selectedLevel = gameData.selectedLevel;
      int largeFont = screenSize.height / kFontScaleLarge;
@@ -592,7 +542,7 @@ enemyPenguinCount--;
       [CCTransition transitionCrossFadeWithDuration:1.0f]];
 }
 
--(void) update:(CCTime)deltaTime
+-(void) updates:(CCTime)deltaTime
 
 {
     
@@ -667,7 +617,7 @@ if(enemyPenguinCount!=0)
                      balloonGreenSprite.visible=YES;
                      penguinballoonCount=2;
                      penguindied=0;
-                      [self schedule:@selector(fall:)];
+                      [self schedule:@selector(fall:) interval:0.017];
                  }],
                   [CCActionFadeIn actionWithDuration:1],
                   nil]];
@@ -698,7 +648,7 @@ if(enemyPenguinCount!=0)
              balloonGreenSprite.visible=YES;
              penguinballoonCount=2;
              penguindied=0;
-            [self schedule:@selector(fall:)];
+            [self schedule:@selector(fall:) interval:0.017];
              
          }],
           [CCActionFadeIn actionWithDuration:1],

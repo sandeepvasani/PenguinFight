@@ -9,7 +9,6 @@
 #import "cocos2d.h"
 #import "SneakyJoystick.h"
 #import "SneakyJoystickSkinnedBase.h"
-
 #import "PauseButton.h"
 #import "PauseLayer.h"
 //#import "SceneManager.h"
