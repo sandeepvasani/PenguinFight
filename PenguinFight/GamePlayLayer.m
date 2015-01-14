@@ -155,6 +155,7 @@
 		
         // Determine Screen Size
         screenSize = [CCDirector sharedDirector].viewSize;
+        self.contentSize=screenSize;
         paused=NO;
 		
 		//initialise all game variables
@@ -363,7 +364,9 @@
         
         [self initJoystickAndButtons];
         [self schedule:@selector(updates:) interval:0.017];
-        self.userInteractionEnabled=TRUE;
+        [self setUserInteractionEnabled:YES];
+        [self setMultipleTouchEnabled:YES];
+        
 		[self schedule:@selector(fall:) interval:0.017];
         
         
@@ -398,7 +401,7 @@
 }
 
 
-- (void)touchEnded:(NSSet *)touch withEvent:(UIEvent *)event {
+- (void)touchEnded:(UITouch *)touch withEvent:(UIEvent *)event {
     
     if(penguindied!=1)
     {
@@ -407,7 +410,7 @@
     }
 }
 
-- (void)touchBegan:(NSSet *)touch withEvent:(UIEvent *)event {
+- (void)touchBegan:(UITouch *)touch withEvent:(UIEvent *)event {
      NSLog(@"touchedd");
     
     if(penguindied!=1)
